@@ -20,7 +20,7 @@ import { inject } from 'vue';
 export default {
     setup() {
         const cart = inject('cart')
-        return cart
+        return { cart }
     },
     data() {
         return {
@@ -33,7 +33,7 @@ export default {
             this.products = response.data
         },
         addToCart(product) {
-            alert(`Product "${product.name}" added to cart`)
+            this.cart.add(product)
         },
     },
     mounted(){
