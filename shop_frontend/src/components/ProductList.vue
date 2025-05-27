@@ -15,8 +15,13 @@
 
 <script>
 import axios from 'axios';
+import { inject } from 'vue';
 
 export default {
+    setup() {
+        const cart = inject('cart')
+        return cart
+    },
     data() {
         return {
             products: [],
