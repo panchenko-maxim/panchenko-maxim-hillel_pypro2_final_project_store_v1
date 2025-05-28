@@ -1,5 +1,10 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 from .models import Category, Product, Order, OrderProduct
+
+
+User = get_user_model()
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,7 +43,8 @@ class OrderSerializer(serializers.ModelSerializer):
         
     def create(self, validated_data):
         items_data = validated_data.pop('items')
-        order = Order.objects.create(**validated_data)
+        user = self.context['request'].user
+        order = Order.objects.create(user=user, **validated_data)
         for item in items_data:
             OrderProduct.objects.create(
                 order=order,
@@ -46,3 +52,14 @@ class OrderSerializer(serializers.ModelSerializer):
                 quantity=item['quantity']
             )
         return order
+    
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'password')
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user

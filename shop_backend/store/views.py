@@ -34,7 +34,4 @@ class RegisterView(APIView):
         user = User.objects.create(username=username, password=password)
         return Response({"message": "User created"}, 
                         status=status.HTTP_201_CREATED)
-    
-    
-    
 
