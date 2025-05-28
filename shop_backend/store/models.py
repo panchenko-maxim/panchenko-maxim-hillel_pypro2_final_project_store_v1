@@ -21,13 +21,13 @@ class Product(models.Model):
         return self.name
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     comment = models.TextField(blank=True, null=True)
     products = models.ManyToManyField(Product, through='OrderProduct')
     
     def __str__(self):
-        return f"{self.id} - {self.created_at}"
+        return f"{self.id} - {self.created_at} - {self.user}"
 
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
