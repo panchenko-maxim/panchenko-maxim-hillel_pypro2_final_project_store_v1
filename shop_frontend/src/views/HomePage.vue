@@ -12,7 +12,7 @@ import ProductList from '@/components/ProductList.vue'
 import UserCart from '@/components/UserCart.vue';
 
 export default {
-    components: { ProductList, UserCart }
+    components: { ProductList, UserCart}
 }
 
 </script>
