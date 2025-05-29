@@ -28,15 +28,33 @@ export default {
                 product_id: item.product.id,
                 quantity: item.quantity
             }))
+
+            const authToken = localStorage.getItem('access_token');
+            if (!authToken) {
+                alert('You need to be logged!')
+                return;
+            }
             
             try {
-                await axios.post('http://localhost:8000/api/orders/', { items, comment: this.comment })
+                await axios.post('http://localhost:8000/api/orders/', { 
+                    items: items, 
+                    comment: this.comment 
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                    }
+                })
                 alert('Order placed')
                 this.cart.clear()
                 this.comment = ''
             } catch (error) {
-                alert('Error order placed')
-                console.error(error)
+                if (error.response && error.response.status === 401) {
+                    alert('Authentication failed. Please log in again.');
+                    
+                } else {
+                    alert('Error placing order. Please try again.');
+                    console.error('Error details:', error.response ? error.response.data : error.message);
+                }
             }
             
         }
