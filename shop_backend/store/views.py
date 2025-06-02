@@ -18,6 +18,13 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    
+    def get_permissions(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
@@ -30,22 +37,6 @@ class OrderViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-# class OrderViewSet(viewsets.ModelViewSet):
-#     queryset = Order.objects.all().order_by('-created_at')
-#     serializer_class = OrderSerializer
-#     permission_classes = [IsAuthenticated]
-
-#     def create(self, request, *args, **kwargs):
-#         # >>> ДОБАВЬТЕ ЭТИ СТРОКИ ДЛЯ ОТЛАДКИ <<<
-#         print("Received request data (from request.data):", request.data)
-#         print("Received request data (from request.POST):", request.POST) # на всякий случай, если это форма
-#         # >>> ------------------------------ <<<
-
-#         serializer = self.get_serializer(data=request.data, context={'request': request})
-#         serializer.is_valid(raise_exception=True)
-#         self.perform_create(serializer)
-#         headers = self.get_success_headers(serializer.data)
-#         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         
 class RegisterView(APIView):
     def post(self, request):
