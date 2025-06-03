@@ -2,6 +2,7 @@
 <div>
     <h1>Store products</h1>
     <!-- <button v-if="!isAuthenticated" @click="logout">Logout</button> -->
+     <AuthButtons />
     <LogoutButton />
     <ProductList />
     <UserCart />
@@ -13,6 +14,7 @@
 import ProductList from '@/components/ProductList.vue'
 import UserCart from '@/components/UserCart.vue';
 import LogoutButton from '@/components/LogoutButton.vue';
+import AuthButtons from '@/components/AuthButtons.vue';
 // import axios from 'axios';
 
 export default {
@@ -21,7 +23,7 @@ export default {
     //         isAuthenticated: false,
     //     }
     // },
-    components: { ProductList, UserCart, LogoutButton},
+    components: { ProductList, UserCart, LogoutButton, AuthButtons},
     // methods: {
     //     async logout() {
     //         try {
