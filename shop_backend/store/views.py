@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import viewsets,status
-from rest_framework import generics
+from rest_framework import viewsets,status, generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Category, Product, Order
 from .serializers import CategorySerializer, ProductSerializer, OrderSerializer, RegisterSerializer
@@ -39,16 +39,42 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         
 class RegisterView(APIView):
+    permission_classes = [AllowAny]
+    
     def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
+        serializer = RegisterSerializer(data = request.data)
         
-        if User.objects.filter(username=username).exists():
-            return Response({"error": "This username is already taken"},
-                            status=status.HTTP_400_BAD_REQUEST)
-        user = User.objects.create(username=username, password=password)
-        return Response({"message": "User created"}, 
-                        status=status.HTTP_201_CREATED)
+        if serializer.is_valid():
+            user = serializer.save()
+        
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            refresh_token = str(refresh)
+            
+            return Response({
+                'message': 'User registered and logged in successfully',
+                'access_token': access_token,
+                'refresh_token': refresh_token 
+            }, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    # def post(self, request):
+        # username = request.data.get('username')
+        # password = request.data.get('password')
+        
+        # if User.objects.filter(username=username).exists():
+        #     return Response({"error": "This username is already taken"}Ч,
+        #                     status=status.HTTP_400_BAD_REQUEST)
+        # user = User.objects.create(username=username, password=password)
+        # return Response({"message": "User created"}, 
+        #                 status=status.HTTP_201_CREATED)
+        
+        # serializer = RegisterSerializer(data=request.data)
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     return Response({'message': 'User created'}, status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class LogoutView(generics.GenericAPIView):
     permission_classes = (IsAuthenticated,)
