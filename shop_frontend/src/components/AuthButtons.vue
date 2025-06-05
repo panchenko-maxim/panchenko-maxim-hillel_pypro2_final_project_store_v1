@@ -1,8 +1,6 @@
 <template>
-    <div class="auth-buttons">
-        <button v-if="!isAuthenticated" @click="goToLogin">Login</button>
-        <button v-if="!isAuthenticated" @click="goToRegister">Register</button>
-    </div>
+        <button v-if="!isAuthenticated" @click="goToLogin" class="btn btn-outline-light">Login</button>
+        <button v-if="!isAuthenticated" @click="goToRegister" class="btn btn-outline-light">Register</button>
 </template>
 
 <script>

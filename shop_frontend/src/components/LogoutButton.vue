@@ -1,5 +1,5 @@
 <template>
-    <button v-if="isAuthenticated" @click="logout">Logout</button>
+    <button v-if="isAuthenticated" @click="logout" class="btn btn-outline-light">Logout</button>
 </template>
 
 <script>

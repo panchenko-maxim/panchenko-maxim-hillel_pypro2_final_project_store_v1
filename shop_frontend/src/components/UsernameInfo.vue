@@ -1,7 +1,11 @@
 <template>
-    <div>
+    <!-- <div>
         <p v-if="isAuthenticated">Username: {{ username }}</p>
         <p v-else>Noname</p>
+    </div> -->
+    <div class="navbar-text me-3">
+        <span v-if="isAuthenticated">Username: {{ username }}</span>
+    <span v-else>Noname</span>
     </div>
 </template>
 
