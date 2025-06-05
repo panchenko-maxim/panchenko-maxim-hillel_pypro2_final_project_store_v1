@@ -1,49 +1,61 @@
 <template>
 <div class="d-flex flex-column min-vh-100">
-    <header class="bg-dark text-white text-center py-3">
+    <header class="bg-dark text-white text-center pt-3 d-flex flex-column">
         <h1>Store products</h1>
         <nav class="navbar navbar-expand navbar-light bg-primary">
+        <div class="container-fluid">
             <div class="dropdown me-3">
                 <button class="btn btn-outline-light dropdown-toggle"
                 type="button"
                 id="dropdownMenuButton"
                 data-bs-toggle="dropdown"
-                aria-expanded="false">
+                aria-expanded="false"
+                data-bs-auto-close="outside">
                     Menu
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <li>
                         <a class="dropdown-item" href="#">Page 1</a>
                     </li>
-                    <li>
-                        <h6 class="dropdown-header">Categories</h6>
-                        <ul class="list-unstyled ms-3">
-                            <li><a class="dropdown-item" href="#">Shoes</a></li>
+                    <li class="dropend"> <a class="dropdown-item dropdown-toggle" href="#"
+                        id="categoriesDropdown" role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="categoriesDropdown"> <li><a class="dropdown-item" href="#">Shoes</a></li>
                             <li><a class="dropdown-item" href="#">Clothes</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#">About us</a>
+                        <router-link to="/about-us" class="dropdown-item">About us</router-link>
                     </li>
                 </ul>
             </div>
+        
+            <div class="d-flex ms-auto">
 
-            <form class="d-flex me-3" role="search">
-                <input
-                    class="form-control me-2" 
+                <form class="d-flex me-3" role="search">
+                <div class="input-group">
+                    <input
+                    class="form-control" 
                     type="search"
                     placeholder="Search"
                     aria-label="Search">
-                <button class="btn btn-outline-light" type="submit">></button>
+                <button class="btn btn-outline-light search-button" type="submit"><i class="fas fa-search"></i></button>
+                </div>
             </form>
 
-            <div class="conteiner-fluid">
-                <UsernameInfo />
-            </div>
+            
+            <UsernameInfo />
+            
 
             <LogoutButton />
             <AuthButtons />
 
+            </div>
+            
+            </div>
         </nav>
 
 
@@ -80,9 +92,25 @@ export default {
 </script>
 
 <style scoped>
-.dropdown-menu .list-unstyled .dropdown-item {
+/* .dropdown-menu .list-unstyled .dropdown-item {
     display: block;
     padding: 0.25rem 1rem;
+} */
+
+.search-button {
+    background-color: transparent;
+    color: #fff;
+    border-color: #dee2e6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.search-button:active {
+    background-color: rgb(153, 180, 113);
 }
 
 </style>
