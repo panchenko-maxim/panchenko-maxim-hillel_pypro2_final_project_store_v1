@@ -3,6 +3,7 @@ import HomePage from '../views/HomePage.vue';
 import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import AboutUs from '@/views/AboutUs.vue';
+import CheckoutPage from '@/views/CheckoutPage.vue'
 // import { compile } from 'vue';
 
 const routes = [
@@ -27,6 +28,11 @@ const routes = [
         name: 'AboutUs',
         component: AboutUs,
         meta: { requiresAuth: false }
+    },
+    {
+        path: '/checkout',
+        name: 'Checkout',
+        component: CheckoutPage,
     }
 ];
 

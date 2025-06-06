@@ -2,10 +2,10 @@
 <div class="d-flex flex-column min-vh-100">
     <header class="bg-dark text-white text-center pt-3 d-flex flex-column">
         <h1>Store products</h1>
-        <nav class="navbar navbar-expand navbar-light bg-primary">
+        <nav class="navbar navbar-expand navbar-light bg-primary pb-1 pt-1">
         <div class="container-fluid">
             <div class="dropdown me-3">
-                <button class="btn btn-outline-light dropdown-toggle"
+                <button class="btn btn-outline-light dropdown-toggle menu-button"
                 type="button"
                 id="dropdownMenuButton"
                 data-bs-toggle="dropdown"
@@ -13,7 +13,7 @@
                 data-bs-auto-close="outside">
                     Menu
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <ul class="dropdown-menu menu-button" aria-labelledby="dropdownMenuButton">
                     <li>
                         <a class="dropdown-item" href="#">Page 1</a>
                     </li>
@@ -23,7 +23,7 @@
                         aria-expanded="false">
                             Categories
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="categoriesDropdown"> <li><a class="dropdown-item" href="#">Shoes</a></li>
+                        <ul class="dropdown-menu menu-button" aria-labelledby="categoriesDropdown"> <li><a class="dropdown-item" href="#">Shoes</a></li>
                             <li><a class="dropdown-item" href="#">Clothes</a></li>
                         </ul>
                     </li>
@@ -32,6 +32,8 @@
                     </li>
                 </ul>
             </div>
+
+            <UserCart />
         
             <div class="d-flex ms-auto">
 
@@ -42,7 +44,7 @@
                     type="search"
                     placeholder="Search"
                     aria-label="Search">
-                <button class="btn btn-outline-light search-button" type="submit"><i class="fas fa-search"></i></button>
+                    <button class="btn btn-outline-light search-button" type="submit"><i class="fas fa-search"></i></button>                
                 </div>
             </form>
 
@@ -66,7 +68,7 @@
 
     <main>
         <ProductList />
-        <UserCart />
+        
     </main>
 
     <footer class="bg-dark text-white text-center py-3 mt-auto">
@@ -96,6 +98,9 @@ export default {
     display: block;
     padding: 0.25rem 1rem;
 } */
+ .menu-button {
+    width: 15em;
+ }
 
 .search-button {
     background-color: transparent;
