@@ -4,6 +4,7 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 product-grid">
         <div class="col" v-for="product in products" :key="product.id">
             <div class="card h-100">
+                <img v-if="product.image" :src="product.image" class="card-img-top" :alt="product.name">
                 <div class="card-body">
                     <h3 class="card-title">{{ product.name }}</h3>
                     <p class="card-text">{{ product.description }}</p>
