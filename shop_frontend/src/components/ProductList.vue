@@ -59,6 +59,11 @@ export default {
 
 
 <style scoped>
+.card-img-top {
+    width: 200px;
+    height: auto;
+}
+
 .product-grid {
     max-height: 80vh; /* Максимальная высота блока, чтобы появилась прокрутка */
     overflow-y: auto; /* Включаем вертикальную прокрутку */
