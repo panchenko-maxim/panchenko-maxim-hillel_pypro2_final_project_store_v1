@@ -60,7 +60,7 @@ export default {
 
 <style scoped>
 .card-img-top {
-    width: 200px;
+    width: 100px;
     height: auto;
 }
 

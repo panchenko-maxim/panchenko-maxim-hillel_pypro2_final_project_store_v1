@@ -4,15 +4,35 @@ import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import AboutUs from '@/views/AboutUs.vue';
 import CheckoutPage from '@/views/CheckoutPage.vue'
+import BaseLayout from '@/components/Base.vue'
 // import { compile } from 'vue';
 
 const routes = [
     {
         path: '/',
-        name: 'HomePage',
-        component: HomePage,
-        meta: { requiresAuth: false }
+        component: BaseLayout,
+        children: [
+            {
+                path: '',
+                name: 'HomePage',
+                component: HomePage,
+                meta: { requiresAuth: false }
+            },
+            {
+                path: 'about-us',
+                name: 'AboutUs',
+                component: AboutUs,
+                meta: { requiresAuth: false }
+            },
+            {
+                path: 'checkout',
+                name: 'Checkout',
+                component: CheckoutPage,
+            },
+        ]
     },
+
+    
     {
         path: '/login',
         name: 'Login',
@@ -23,17 +43,6 @@ const routes = [
         name: 'Register',
         component: RegisterView,
     },
-    {
-        path: '/about-us',
-        name: 'AboutUs',
-        component: AboutUs,
-        meta: { requiresAuth: false }
-    },
-    {
-        path: '/checkout',
-        name: 'Checkout',
-        component: CheckoutPage,
-    }
 ];
 
 const router = createRouter({
