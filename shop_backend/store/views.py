@@ -1,10 +1,12 @@
 from django.contrib.auth import get_user_model
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import viewsets,status, generics
+from rest_framework import viewsets, status, generics, filters
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from .filters import ProductFilter
 from .models import Category, Product, Order
 from .serializers import CategorySerializer, ProductSerializer, OrderSerializer, RegisterSerializer
 
@@ -18,6 +20,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = ProductFilter
+    ordering_fields = ['category__name']
+    ordering = ['name']
     
     def get_permissions(self):
         if self.action == 'list' or self.action == 'retrieve':
