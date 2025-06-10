@@ -73,7 +73,7 @@
     </main>
 
     <footer class="bg-dark text-white text-center py-3 mt-auto">
-        <p>Footer</p>
+        <p>Are you have some questions, pitor?</p>
     </footer>
     
     
