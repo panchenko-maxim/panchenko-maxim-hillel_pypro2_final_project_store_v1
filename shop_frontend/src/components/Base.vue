@@ -23,8 +23,15 @@
                         aria-expanded="false">
                             Categories
                         </a>
-                        <ul class="dropdown-menu menu-button" aria-labelledby="categoriesDropdown"> <li><a class="dropdown-item" href="#">Shoes</a></li>
-                            <li><a class="dropdown-item" href="#">Clothes</a></li>
+                        <ul class="dropdown-menu menu-button" aria-labelledby="categoriesDropdown"> 
+                            <li v-for="category in categories" :key="category.id">
+                                <a class="dropdown-item" :href="'/category/' + category.name">{{ category.name }}</a>
+                            </li>
+                            <li v-if="categories.length === 0">
+                                <a class="dropdown-item" href="#">No categories</a>
+                            </li>
+                            <!-- <li><a class="dropdown-item" href="#">Shoes</a></li>
+                            <li><a class="dropdown-item" href="#">Clothes</a></li> -->
                         </ul>
                     </li>
                     <li>
@@ -75,6 +82,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 // import ProductList from '@/components/ProductList.vue'
 import UserCart from '@/components/UserCart.vue';
 import LogoutButton from '@/components/LogoutButton.vue';
@@ -84,6 +92,26 @@ import UsernameInfo from '@/components/UsernameInfo.vue';
 export default {
     name: 'BaseLayout',
     components: { UserCart, LogoutButton, AuthButtons, UsernameInfo},
+    data() {
+        return {
+            categories: []
+        }
+    },
+    methods: {
+        async fetchCategories() {
+            try {
+                const response = await axios.get('http://localhost:8000/api/categories/')
+                this.categories = response.data
+
+            } catch (error) {
+                console.error('Error response while getting categories:', error)
+            }
+        }
+    },
+    created() {
+        this.fetchCategories();
+    }
+
 }
 
 </script>
