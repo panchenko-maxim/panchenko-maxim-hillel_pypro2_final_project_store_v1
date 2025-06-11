@@ -8,16 +8,22 @@
         <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
     </svg>
     </a>
-    <span v-if="cart.items.length > 0" class="item-count">{{ cart.items.length }}</span>
+    <span v-if="totalCartItems > 0" class="item-count">{{ totalCartItems }}</span>
+    {{ console.log(cart.items) }}
 </div>
 
 <div v-if="showCartOverlay" class="cart-overlay">
     <div class="cart-overlay-content">
         <button @click="toggleCartOverlay" class="close-button">X</button>
         <h2>Cart</h2>
-        <ul>
+        <ul v-if="cart.items.length > 0"> 
             <li v-for="item in cart.items" :key="item.product.id">
-                {{ item.product.name }} - {{ item.quantity }} units
+                <span>{{ item.product.name }}</span>
+                <button @click="cart.decrementQuantity(item.product.id)" 
+                    :disabled="item.quantity <= 1">-</button>
+                <span>{{ item.quantity }}</span>
+                <button @click="cart.incrementQuantity(item.product.id)">+</button>
+                
                 <button @click="cart.remove(item.product.id)">Delete</button>
             </li>
         </ul>
@@ -25,18 +31,6 @@
         <button @click="goToCheckout" :disabled="cart.items.length === 0" class="checkout-button">Make an order</button>
     </div>
 </div>
-
-<!-- <div>
-    <h2>Cart</h2>
-    <ul>
-        <li v-for="item in cart.items" :key="item.product.id">
-            {{ item.product.name }} - {{ item.quantity }} units
-            <button @click="cart.remove(item.product.id)">Delete</button>
-        </li>
-    </ul>
-    <textarea v-model="comment" placeholder="Comment for your order (optional)"></textarea>
-    <button @click="submitOrder" :disabled="cart.items.length === 0">Make an order</button>
-</div>     -->
 </template>
 
 <script>
@@ -97,6 +91,15 @@ export default {
                 }
             }
             
+        }
+
+    },
+    computed: {
+        totalCartItems() {
+            if (!this.cart || !this.cart.items || this.cart.items.length === 0) {
+                return 0;
+            }
+            return this.cart.items.reduce((sum, item) => sum + item.quantity, 0);
         }
     }
 }
@@ -224,6 +227,8 @@ export default {
     max-width: 400px; /* Или установите максимальную ширину */
     /* ... остальные стили ... */
 }
+
+
 
 
 </style>
