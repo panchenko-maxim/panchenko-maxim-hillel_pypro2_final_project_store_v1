@@ -1,5 +1,5 @@
 <template>
-<ProductList />
+<ProductList apiUrl="http://localhost:8000/api/products/"/>
 </template>
 
 <script>

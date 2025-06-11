@@ -1,5 +1,5 @@
 <template>
-    <h2>List of products</h2>
+    <h2>List of {{ infoTitle() }}</h2>
 <div class="container-fluid mt-4">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 product-grid">
         <div class="col" v-for="product in products" :key="product.id">
@@ -13,14 +13,6 @@
                 </div>
             </div>
         </div>
-        <!-- <ul>
-            <li v-for="product in products" :key="product.id">
-                <h3>{{ product.name }}</h3>
-                <p>{{ product.description }}</p>
-                <p>Price: {{ product.price }} coin.</p>
-                <button @click="addToCart(product)">Add to cart</button>
-            </li>
-         </ul> -->
     </div>
     
 </div>
@@ -32,23 +24,61 @@ import axios from 'axios';
 import { inject } from 'vue';
 
 export default {
+    props: {
+        apiUrl: {
+            type: String,
+            required: true,
+        }
+    },
     setup() {
         const cart = inject('cart')
         return { cart }
     },
     data() {
         return {
+            title: '',
             products: [],
+            loading: false,
+            error: null,
+        }
+    },
+    watch: {
+        apiUrl: {
+            immediate: true,
+            handler: 'fetchProducts',
         }
     },
     methods: {
         async fetchProducts() {
-            const response = await axios.get('http://localhost:8000/api/products/')
-            this.products = response.data
+            this.loading = true;
+            this.error = null;
+            this.products = [];
+            try {
+                const response = await axios.get(this.apiUrl);
+                this.products = response.data
+            } catch(err) {
+                console.error('Error while receiving products', err);
+                this.error = 'Failed to load products. Please try again later.'
+            } finally {
+                this.loading = false;
+            }
+            
         },
         addToCart(product) {
             this.cart.add(product)
         },
+
+        infoTitle() {
+            const listUrl = this.apiUrl.split('/')
+            if (listUrl[listUrl.length - 1] == ''){
+                return 'products'
+            } else {
+                return listUrl[listUrl.length - 1].split('=')[1]
+            }
+            
+        
+            
+        }
     },
     mounted(){
         this.fetchProducts()
@@ -65,12 +95,11 @@ export default {
 }
 
 .product-grid {
-    max-height: 80vh; /* Максимальная высота блока, чтобы появилась прокрутка */
-    overflow-y: auto; /* Включаем вертикальную прокрутку */
-    padding-right: 15px; /* Добавляем небольшой отступ справа, чтобы не было наложения на скроллбар */
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-right: 15px;
 }
 
-/* Дополнительные стили для лучшего отображения */
 .card {
     transition: transform 0.2s ease-in-out;
 }
