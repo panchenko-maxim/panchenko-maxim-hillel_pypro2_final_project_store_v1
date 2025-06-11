@@ -4,6 +4,7 @@ import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import AboutUs from '@/views/AboutUs.vue';
 import CheckoutPage from '@/views/CheckoutPage.vue'
+import CategoryPage from '@/views/CategoryPage.vue';
 import BaseLayout from '@/components/Base.vue'
 // import { compile } from 'vue';
 
@@ -23,6 +24,12 @@ const routes = [
                 name: 'AboutUs',
                 component: AboutUs,
                 meta: { requiresAuth: false }
+            },
+            {
+                path: '/category/:categoryName',
+                name: 'CategoryProducts',
+                component: CategoryPage,
+                props: true,
             },
             {
                 path: 'checkout',
