@@ -15,5 +15,22 @@ export const cart = reactive({
     },
     clear() {
         cart.items = []
+    },
+    incrementQuantity(productId) {
+        const item = cart.items.find(i => i.product.id === productId);
+        if (item){
+            item.quantity++
+        }
+    },
+    decrementQuantity(productId) {
+        const itemIndex = cart.items.findIndex(i => i.product.id === productId);
+        if (itemIndex !== -1) {
+            const item = cart.items[itemIndex];
+            if (item.quantity > 1) {
+                item.quantity --;
+            } else {
+                this.items.splice(itemIndex, 1)
+            }
+        }
     }
 })
