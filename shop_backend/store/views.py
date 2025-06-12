@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -8,7 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .filters import ProductFilter
 from .models import Category, Product, Order
-from .serializers import CategorySerializer, ProductSerializer, OrderSerializer, RegisterSerializer
+from .serializers import CategorySerializer, ProductSerializer, OrderSerializer, RegisterSerializer, CartItemSerializer
 
 User = get_user_model()
 
@@ -66,23 +67,6 @@ class RegisterView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    # def post(self, request):
-        # username = request.data.get('username')
-        # password = request.data.get('password')
-        
-        # if User.objects.filter(username=username).exists():
-        #     return Response({"error": "This username is already taken"}Ч,
-        #                     status=status.HTTP_400_BAD_REQUEST)
-        # user = User.objects.create(username=username, password=password)
-        # return Response({"message": "User created"}, 
-        #                 status=status.HTTP_201_CREATED)
-        
-        # serializer = RegisterSerializer(data=request.data)
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     return Response({'message': 'User created'}, status=status.HTTP_201_CREATED)
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
 class LogoutView(generics.GenericAPIView):
     permission_classes = (IsAuthenticated,)
 
@@ -94,8 +78,81 @@ class LogoutView(generics.GenericAPIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+class CartView(APIView):
+    def get_cart_key(self, request):
+        if request.user.is_authenticated:
+            return f"cart:{request.user.id}"
+        if not request.session.session_key:
+            request.session.save()
+        return f"cart:{request.session.session_key}"
+    
+    def get(self, request):
+        cart_key = self.get_cart_key(request)
+        cart_data = cache.get(cart_key, [])
+        serializer = CartItemSerializer(cart_data, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        cart_key = self.get_cart_key(request)
+        product_id = request.data.get('product_id')
+        quantity = request.data.get('quantity', 1)
+        
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        cart_items = cache.get(cart_key, [])
+        existing_item = next((item for item in cart_items if item['product_id'] == product_id), None)
+        
+        if existing_item:
+            existing_item['quantity'] += quantity
+        else:
+            cart_items.append({'product_id': product_id, 'quantity': quantity})
+                              
+        cache.set(cart_key, cart_items, timeout=60 * 60 * 24 * 7)
+        serializer = CartItemSerializer(cart_items, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def put(self, request):
+        cart_key = self.get_cart_key(request)
+        product_id = request.data.get('product_id')
+        quantity = request.data.get('quantity')
+        
+        if not all([product_id, quantity is not None]):
+            return Response({'error': "product_id and quantity ate required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        cart_items = cache.get(cart_key, [])
+        item_found = False
+        for item in cart_items:
+            if item['product_id'] == product_id:
+                item['quantity'] = quantity
+                item_found = True
+                break
+        if not item_found:
+            return Response({'error': 'Product not in cart'}, status=status.HTTP_404_NOT_FOUND)
+        
+        cart_items = [item for item in cart_items if item['quantity'] > 0]
+        
+        cache.set(cart_key, cart_items, timeout=60 * 60 * 24 * 7)
+        serializer = CartItemSerializer(cart_items, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def delete(self, request, product_id=None):
+        cart_key = self.get_cart_key(request)
+        cart_items = cache.get(cart_key, [])
+        
+        if product_id:
+            cart_items = [item for item in cart_items if item['product_id'] != product_id]
+        else:
+            cart_items = []
+            
+        cache.set(cart_key, cart_items, timeout=60 * 60 * 24 * 7)
+        serializer = CartItemSerializer(cart_items, many=True)
+        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+        
     
         
 
-    
 
