@@ -65,3 +65,17 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
+    
+class CartItemSerializer(serializers.Serializer):
+    product_id = serializers.IntegerField(write_only=True)
+    product = ProductSerializer(read_only=True)
+    quantity = serializers.IntegerField(min_value=1)
+    
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        try:
+            product = Product.objects.get(id=instance['product_id'])
+            ret['product'] = ProductSerializer(product).data
+        except Product.DoesNotExist:
+            ret['product'] = None
+        return ret
