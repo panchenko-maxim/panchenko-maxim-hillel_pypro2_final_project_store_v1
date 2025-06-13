@@ -30,6 +30,7 @@ const routes = [
                 name: 'CategoryProducts',
                 component: CategoryPage,
                 props: true,
+                meta: { requiresAuth: false }
             },
             {
                 path: 'checkout',

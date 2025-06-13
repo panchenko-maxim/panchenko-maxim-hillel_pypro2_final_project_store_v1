@@ -17,6 +17,13 @@ User = get_user_model()
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    
+    def get_permissions(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -80,6 +87,8 @@ class LogoutView(generics.GenericAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
 class CartView(APIView):
+    permission_classes = [AllowAny]
+    
     def get_cart_key(self, request):
         if request.user.is_authenticated:
             return f"cart:{request.user.id}"
