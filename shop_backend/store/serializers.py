@@ -70,6 +70,7 @@ class CartItemSerializer(serializers.Serializer):
     product_id = serializers.IntegerField(write_only=True)
     product = ProductSerializer(read_only=True)
     quantity = serializers.IntegerField(min_value=1)
+    user_id = serializers.IntegerField(allow_null=True)
     
     def to_representation(self, instance):
         ret = super().to_representation(instance)
