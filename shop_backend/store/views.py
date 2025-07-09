@@ -115,10 +115,12 @@ class CartView(APIView):
         cart_items = cache.get(cart_key, [])
         existing_item = next((item for item in cart_items if item['product_id'] == product_id), None)
         
+        user_id = request.user.id if request.user.is_authenticated else None
+        
         if existing_item:
             existing_item['quantity'] += quantity
         else:
-            cart_items.append({'product_id': product_id, 'quantity': quantity})
+            cart_items.append({'product_id': product_id, 'quantity': quantity, 'user_id': user_id})
                               
         cache.set(cart_key, cart_items, timeout=60 * 60 * 24 * 7)
         serializer = CartItemSerializer(cart_items, many=True)
@@ -134,9 +136,12 @@ class CartView(APIView):
         
         cart_items = cache.get(cart_key, [])
         item_found = False
+        user_id = request.user.id if request.user.is_authenticated else None
+        
         for item in cart_items:
             if item['product_id'] == product_id:
                 item['quantity'] = quantity
+                item['user_id'] = user_id
                 item_found = True
                 break
         if not item_found:
