@@ -2,6 +2,9 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
+import { cart } from './store/cart.js'
+
+axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(
     config => {
@@ -36,5 +39,9 @@ axios.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+cart.loadCart().then(() => {
+    createApp(App).use(router).mount('#app');
+})
 
 createApp(App).use(router).mount('#app')
