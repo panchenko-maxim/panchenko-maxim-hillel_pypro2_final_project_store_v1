@@ -49,7 +49,7 @@ export const cart = reactive({
     async remove(productId) {
         this.items = this.items.filter(i => i.product.id !== productId)
         try {
-            await axios.delete(`${API_BASE_URL}/cart/${productId}`);
+            await axios.delete(`${API_BASE_URL}/cart/${productId}/`);
         } catch (error) {
             console.error('Error removing item from cart:', error);
             await this.loadCart();
