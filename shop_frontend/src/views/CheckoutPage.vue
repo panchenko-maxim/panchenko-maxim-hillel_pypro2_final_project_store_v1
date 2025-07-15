@@ -9,7 +9,7 @@
         <ul>
             <li v-for="item in cart.items" :key="item.product.id">
                 <div v-if="item && item.product">
-                    <img v-if="item.product.image" :src="item.product.image" :alt="item.product.name">
+                    <img v-if="item.product.image" :src="getFullImageUrl(item.product.image)" :alt="item.product.name">
                     <h5>Product name: "{{ item.product.name }}"</h5>
                     <p>Count: 
                         <button @click="cart.decrementQuantity(item.product.id)" 
@@ -40,7 +40,14 @@ export default{
     setup() {
         const cart = inject('cart');
 
-        return { cart, }
+        const API_BASE_URL = 'http://127.0.0.1:8000';
+
+        const getFullImageUrl = (relativePath) => {
+            if (!relativePath) return '';
+            return `${API_BASE_URL}${relativePath.startsWith('/') ? '' : '/'}${relativePath}`;
+        }
+
+        return { cart, getFullImageUrl};
     }
     
 }
@@ -64,6 +71,9 @@ img {
 li {
     list-style-type: none;
     margin-bottom: 3%;
+    margin-right: 20%;
+    padding-bottom: 1%;
+    border-bottom: 0.5px solid gray;
     
 }
 
