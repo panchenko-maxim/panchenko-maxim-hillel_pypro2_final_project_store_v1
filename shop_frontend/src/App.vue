@@ -12,7 +12,7 @@ export default {
   provide() {
     return {cart: this.cart}
   }
-}
+} 
 
 
 </script>
