@@ -76,7 +76,7 @@ class CartItemSerializer(serializers.Serializer):
         ret = super().to_representation(instance)
         try:
             product = Product.objects.get(id=instance['product_id'])
-            ret['product'] = ProductSerializer(product).data
+            ret['product'] = ProductSerializer(product, context=self.context).data
         except Product.DoesNotExist:
             ret['product'] = None
         return ret
