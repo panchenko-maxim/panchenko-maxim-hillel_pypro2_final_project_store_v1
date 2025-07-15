@@ -85,6 +85,14 @@ export const cart = reactive({
                 await this.remove(productId);
             }
         }
+    },
+
+    get totalItems() {
+        return this.items.reduce((total, item) => total + item.quantity, 0);
+    },
+
+    get totalCost(){
+        return this.items.reduce((total, item) => total + (item.product.price * item.quantity), 0);
     }
 
 
