@@ -1,11 +1,11 @@
 <template>
     <div class="cart">
         <h1>Your order</h1>
-        <ul>
+        <!-- <ul>
             <li v-for="item in cart.items" :key="item.product.id">{{ item }}</li>
         </ul>
         <br>
-        <br>
+        <br> -->
         <ul>
             <li v-for="item in cart.items" :key="item.product.id">
                 <div v-if="item && item.product">
@@ -294,6 +294,8 @@ button:disabled {
 /* Стили для новой секции формы */
 .filling_info {
   margin-top: 40px;
+  margin-left: 10%;
+  margin-right: 10%;
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
