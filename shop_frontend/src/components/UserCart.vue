@@ -27,7 +27,7 @@
                 <button @click="cart.remove(item.product.id)">Delete</button>
             </li>
         </ul>
-        <textarea v-model="comment" placeholder="Comment for your order (optional)"></textarea>
+        <!-- <textarea v-model="comment" placeholder="Comment for your order (optional)"></textarea> -->
         <button @click="goToCheckout" :disabled="cart.items.length === 0" class="checkout-button">Make an order</button>
     </div>
 </div>
