@@ -59,6 +59,12 @@
                 <span v-if="errors.address" class="error-message">{{ errors.address }}</span>
             </div>
 
+            <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea id="comment" v-model="formData.comment" rows="3" required></textarea>
+                <span v-if="errors.comment" class="error-message">{{ errors.comment }}</span>
+            </div>
+
             <button type="submit" :disabled="isPlacingOrder || cart.totalItems === 0" class="place-order-button">
                 {{ isPlacingOrder ? 'Placing Order ...' : 'Place Order' }}
             </button>
@@ -88,6 +94,7 @@ export default{
             email: '',
             phone: '',
             address: '',
+            comment: '',
         });
 
         const errors = reactive({});
@@ -152,8 +159,9 @@ export default{
                 customer_email: formData.email,
                 customer_phone: formData.phone,
                 delivery_address: formData.address,
+                customer_comment: formData.comment,
                 items: cart.items.map(item => ({
-                    product: item.product.id,
+                    product_id: item.product.id,
                     quantity: item.quantity,
                     price_at_order: item.product.price
                 })),
@@ -161,6 +169,7 @@ export default{
             };
 
             try {
+                console.log(orderPayload)
                 const response = await axios.post(ORDER_API_ENDPOINT, orderPayload);
                 console.log('Order placed successfully:', response.data);
                 orderSuccess.value = true;
@@ -171,6 +180,7 @@ export default{
                 formData.email = '';
                 formData.phone = '';
                 formData.address = '';
+                formData.comment = '';
             } catch (err) {
                 console.error('Error placing order:', err);
                 if (err.response && err.response.data) {

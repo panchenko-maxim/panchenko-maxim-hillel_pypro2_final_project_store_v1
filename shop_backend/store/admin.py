@@ -8,5 +8,5 @@ admin.site.register(OrderProduct)
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["user", "created_at", "comment"]
 
