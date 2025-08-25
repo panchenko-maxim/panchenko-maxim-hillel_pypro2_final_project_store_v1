@@ -1,11 +1,6 @@
 <template>
     <div class="cart">
         <h1>Your order</h1>
-        <!-- <ul>
-            <li v-for="item in cart.items" :key="item.product.id">{{ item }}</li>
-        </ul>
-        <br>
-        <br> -->
         <ul>
             <li v-for="item in cart.items" :key="item.product.id">
                 <div v-if="item && item.product">
