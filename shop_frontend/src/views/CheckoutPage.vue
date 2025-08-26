@@ -159,7 +159,7 @@ export default{
                 customer_email: formData.email,
                 customer_phone: formData.phone,
                 delivery_address: formData.address,
-                customer_comment: formData.comment,
+                comment: formData.comment,
                 items: cart.items.map(item => ({
                     product_id: item.product.id,
                     quantity: item.quantity,
