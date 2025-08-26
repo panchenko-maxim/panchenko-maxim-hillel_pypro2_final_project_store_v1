@@ -24,6 +24,10 @@ class Product(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    full_name = models.CharField(blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    phone = models.IntegerField(blank=True, null=True)
+    delivery_address = models.TextField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     products = models.ManyToManyField(Product, through='OrderProduct')
     
