@@ -155,9 +155,9 @@ export default{
             isPlacingOrder.value = true;
 
             const orderPayload = {
-                customer_name: formData.full_name,
-                customer_email: formData.email,
-                customer_phone: formData.phone,
+                full_name: formData.full_name,
+                email: formData.email,
+                phone: formData.phone,
                 delivery_address: formData.address,
                 comment: formData.comment,
                 items: cart.items.map(item => ({
@@ -169,7 +169,12 @@ export default{
             };
 
             try {
-                console.log(orderPayload)
+                console.log("Payload being sent:", {
+                  full_name: formData.full_name,
+                  email: formData.email,
+                  phone: formData.phone,
+                });
+
                 const response = await axios.post(ORDER_API_ENDPOINT, orderPayload);
                 console.log('Order placed successfully:', response.data);
                 orderSuccess.value = true;
