@@ -1,7 +1,9 @@
 <template>
 <div class="d-flex flex-column min-vh-100">
     <header class="bg-dark text-white text-center pt-3 d-flex flex-column">
-        <h1>Store products</h1>
+        <h1>
+            <router-link to="/" class="text-decoration-none">Store products</router-link>
+        </h1>
         <nav class="navbar navbar-expand navbar-light bg-primary pb-1 pt-1">
         <div class="container-fluid">
             <div class="dropdown me-3">
