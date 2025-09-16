@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django_filters.rest_framework import DjangoFilterBackend
+from django.shortcuts import get_object_or_404
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets, status, generics, filters
@@ -9,10 +11,16 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .filters import ProductFilter
 from .models import Category, Product, Order
-from .serializers import CategorySerializer, ProductSerializer, OrderSerializer, RegisterSerializer, CartItemSerializer
+from .serializers import CategorySerializer, ProductSerializer, OrderSerializer, RegisterSerializer, CartItemSerializer, UserSerializer
 
 User = get_user_model()
 
+class UserDetailView(RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'username'
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated] 
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
