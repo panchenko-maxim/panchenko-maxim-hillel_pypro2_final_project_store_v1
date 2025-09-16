@@ -5,6 +5,10 @@ from .models import Category, Product, Order, OrderProduct
 
 User = get_user_model()
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,6 +1,7 @@
 <template>
   <div class="container mt-4">
     <h2>User Profile: {{ username }}</h2>
+    <h2>Userdata: {{  userData }}</h2>
   </div>
 </template>
 
