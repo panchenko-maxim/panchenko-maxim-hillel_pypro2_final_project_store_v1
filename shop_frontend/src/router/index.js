@@ -37,6 +37,11 @@ const routes = [
                 name: 'Checkout',
                 component: CheckoutPage,
             },
+            {
+                path: 'user/:username',
+                name: 'UserProfile',
+                component: () => import('@/components/UserProfile.vue')
+            }
         ]
     },
 

@@ -1,6 +1,14 @@
 <template>
     <div class="navbar-text me-3">
-        <span v-if="isAuthenticated">Username: <div class="badge bg-highlight text-wrap" style="width: 6rem;">{{ username }}</div></span>
+        <span v-if="isAuthenticated">
+            Username: 
+            <router-link 
+                :to="`/user/${username}`"
+                class="badge bg-highlight text-wrap text-decoration-none" 
+                style="width: 6rem;">
+                {{ username }}
+            </router-link>
+        </span>
     <span v-else>Noname</span>
     </div>
 </template>
