@@ -6,9 +6,15 @@ from .models import Category, Product, Order, OrderProduct
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
+    orders = serializers.SerializerMethodField()
+    
     class Meta:
         model = User
         fields = '__all__'
+        
+    def get_orders(self, obj):
+        user_orders = Order.objects.filter(user=obj)
+        return OrderSerializer(user_orders, many=True).data
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
