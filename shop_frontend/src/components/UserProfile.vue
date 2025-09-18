@@ -1,7 +1,12 @@
 <template>
   <div class="container mt-4">
     <h2>User Profile: {{ username }}</h2>
-    <h2>Userdata: {{  userData }}</h2>
+    <!-- <h2>Userdata: {{  userData }}</h2> -->
+     <ul>
+      <li v-for="(item,index) in userData" :key="index">
+        {{ index }}: {{ item }}
+      </li>
+     </ul>
   </div>
 </template>
 
@@ -25,7 +30,7 @@ export default {
   methods: {
     async fetchUserData(){
         try {
-            const response = await axios.get(`http://localhost:8000/api/users/${this.username}/`);
+            const response = await axios.get(`http://localhost:8000/api/users/${this.username}`);
             this.userData = response.data
         } catch (error) {
             if (error.response) {
